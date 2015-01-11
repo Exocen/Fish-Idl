@@ -11,6 +11,7 @@ public class Agent {
     protected int nb_shark = 0;
     protected int nb_fish = 0;
     protected int empty_case = 0;
+    protected int age=0;
 
 
     public Agent(Env e, int x, int y, int b) {
@@ -24,6 +25,7 @@ public class Agent {
 
 
     protected void doIt() {
+        age++;
         zone_build();
         int try_move = 5;
         if (empty_case != 0) {
@@ -67,10 +69,10 @@ public class Agent {
         }
     }
 
-    public void reproduce(int posX, int posY) {
+    protected void reproduce(int posX, int posY) {
     }
 
-    public int get_alea(int min, int max) {
+    protected int get_alea(int min, int max) {
         Random rand = new Random();
         return (rand.nextInt(max - min + 1) + min);
     }
@@ -82,7 +84,7 @@ public class Agent {
         env.map[posX][posY] = this;
     }
 
-    public void zone_build() {
+    protected void zone_build() {
         zone = new String[8];
         nb_fish = 0;
         nb_shark = 0;
@@ -110,7 +112,6 @@ public class Agent {
         }
     }
 
-
     protected int[] coordinate(int x) {
         switch (x) {
             case 0:
@@ -132,6 +133,10 @@ public class Agent {
             default:
                 return new int[]{0, 0};
         }
+    }
+
+    public int get_age(){
+        return age;
     }
 
     public String toString() {
