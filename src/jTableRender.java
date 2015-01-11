@@ -5,7 +5,6 @@ import java.awt.*;
 /**
  * Définir l'affichage dans un JTable
  *
- * @author Fobec 2010
  */
 public class jTableRender extends DefaultTableCellRenderer {
 

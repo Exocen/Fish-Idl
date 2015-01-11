@@ -68,8 +68,7 @@ public class Agent {
         }
     }
 
-    protected void reproduce(int posX, int posY) {
-    }
+    protected void reproduce(int posX, int posY) {}
 
     protected int get_alea(int min, int max) {
         Random rand = new Random();
