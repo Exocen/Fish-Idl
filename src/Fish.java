@@ -1,4 +1,3 @@
-
 public class Fish extends Agent {
 
 
@@ -13,7 +12,7 @@ public class Fish extends Agent {
     }
 
     @Override
-    public void reproduce(int posX, int posY){
+    public void reproduce(int posX, int posY) {
         Agent f = new Fish(env, posX, posY, breeding_time);
         SMA.agents.add(f);
 

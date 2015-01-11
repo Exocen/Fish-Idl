@@ -1,35 +1,112 @@
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class SMA {
+public class SMA extends JFrame {
 
     public static ArrayList<Agent> agents = new ArrayList<Agent>();
+    public final int length_map = 30;
     public ArrayList<Agent> agents_alea = new ArrayList<Agent>();
-    public String fish_shark_pop = "";
+    public String fish_shark_pop = "F S\n";
+    public String fish_shark_overTime = "T F S \n";
+    public int time = 0;
+    public int nb_shark = 0;
+    public int nb_fish = 0;
+    public Object[][] donnees;
+    public String[] entetes;
+    public JTable tableau;
+    //plot "graph_pop_time.log" u 1:2 w l, "graph_pop_time.log" u 1:3 w l
+
+    public SMA() {
+        super();
+        setTitle("Fish & Shark");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
 
     public static void main(String[] args) {
         SMA sm = new SMA();
-        Env a = sm.constructor(100, 75, 4, 4, 30);
-        sm.write_file("coucou\n toi!");
-        for (int i = 0; i < 50; i++) {
-            // sm.render(a);
-            // System.out.println(agents.size());
-            sm.dIt();
+        //nb_fish,  nb_shark,  breeding_time,  feeding_time,  length_map
+
+
+        sm.entetes = new String[sm.length_map];
+        for (int i = 0; i < sm.length_map; i++) {
+            sm.entetes[i] = "";
         }
+
+        Env a = sm.constructor(100, 65, 4, 3, sm.length_map);
+        sm.donnees = new Object[sm.length_map][sm.length_map];
+        sm.render();
+        sm.tableau.setDefaultRenderer(Object.class, new jTableRender());
+        sm.setVisible(true);
+        boolean launch = true;
+        //for (int i = 0; i < 20; i++) {
+        while (launch) {
+            //sm.render_console(a);
+            sm.readeable_env(a);
+            sm.dIt();
+            sm.repaint();
+
+            if (sm.nb_fish == 0 || sm.nb_shark == 0) {
+                launch = false;
+            }
+
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+        sm.write_file(sm.fish_shark_pop, "graph_pop.log");
+        sm.write_file(sm.fish_shark_overTime, "graph_pop_time.log");
+        System.out.println("over");
+    }
+
+    public void render() {
+        tableau = new JTable(donnees, entetes);
+        getContentPane().add(tableau, BorderLayout.NORTH);
+        tableau.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        pack();
     }
 
     public void dIt() {
         randomize_agents();
-        for (int i = 0; i < agents_alea.size(); i++) {
+        int i = 0;
+        while (i < agents_alea.size()) {
             Agent a = agents_alea.get(i);
             a.doIt();
+            i++;
+        }
+        time++;
+        get_pop();
+        fish_shark_pop += nb_fish + " " + nb_shark + "\n";
+        fish_shark_overTime += time + " " + nb_fish + " " + nb_shark + "\n";
+
+
+    }
+
+    public void readeable_env(Env env) {
+        int i2 = 0;
+        int j2 = 0;
+        for (Agent i[] : env.map) {
+            for (Agent j : i) {
+                if (j == null) {
+                    donnees[i2][j2] = " ";
+                } else {
+                    donnees[i2][j2] = "" + j.toString();
+                }
+                j2++;
+            }
+            i2++;
+            j2 = 0;
         }
     }
 
-    public void render(Env e) {
+    public void render_console(Env e) {
         for (Agent i[] : e.map) {
             for (Agent j : i) {
                 if (j == null) {
@@ -43,20 +120,25 @@ public class SMA {
         System.out.println("------------------------------------------------------------");
     }
 
-    public void fish_shark_pop_graph(String s) {
-        fish_shark_pop += s;
+    public void get_pop() {
+        nb_fish = 0;
+        nb_shark = 0;
+        for (int i = 0; i < agents_alea.size(); i++) {
+            if (agents.get(i).toString().equals("S")) {
+                nb_shark++;
+            } else if (agents.get(i).toString().equals("F")) {
+                nb_fish++;
+            }
+        }
     }
 
-    public void write_file(String s) {
+    public void write_file(String s, String file_name) {
         try {
-            PrintWriter writer = new PrintWriter("test.log", "UTF-8");
+            PrintWriter writer = new PrintWriter(file_name, "UTF-8");
             writer.println(s);
             writer.close();
-
-        } catch (IOException e) {
-            System.out.println(e);
+        } catch (IOException ignored) {
         }
-
     }
 
     public Env constructor(int nb_fish, int nb_shark, int breeding_time, int feeding_time, int lenght_map) {
@@ -86,7 +168,6 @@ public class SMA {
                 }
             }
         }
-
         return env;
     }
 

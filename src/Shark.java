@@ -18,20 +18,20 @@ public class Shark extends Agent {
             int x2 = 0;
             int y2 = 0;
             for (int i = 0; i < zone.length; i++) {
-                 if (zone[i] != null && zone[i].equals("F")) {
+                if (zone[i] != null && zone[i].equals("F")) {
                     if (ite == random_fish) {
                         //System.out.println("x=" + posX + " y=" + posY + " zone=" + zone[i] + " random=" + random_fish + " nbfi=" + nb_fish);
                         int[] coord = coordinate(i);
                         x2 = coord[0];
                         y2 = coord[1];
-                        i=zone.length+1;
+                        i = zone.length + 1;
                     } else {
                         ite++;
                     }
                 }
             }
             if (x2 == 0 && y2 == 0) {
-                System.out.println("x=" + posX + " y=" + posY +" ERREUR");
+                System.out.println("x=" + posX + " y=" + posY + " ERREUR");
             }
             x2 = posX + x2;
             y2 = posY + y2;

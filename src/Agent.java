@@ -11,7 +11,7 @@ public class Agent {
     protected int nb_shark = 0;
     protected int nb_fish = 0;
     protected int empty_case = 0;
-    protected int age=0;
+    protected int age = 0;
 
 
     public Agent(Env e, int x, int y, int b) {
@@ -27,7 +27,6 @@ public class Agent {
     protected void doIt() {
         age++;
         zone_build();
-        int try_move = 5;
         if (empty_case != 0) {
             int alea_pos = get_alea(1, empty_case);
 
@@ -42,14 +41,14 @@ public class Agent {
                         int[] coord = coordinate(i);
                         x = coord[0];
                         y = coord[1];
-                        i=zone.length+1;//sortie de boucle
+                        i = zone.length + 1;//sortie de boucle
                     } else {
                         ite++;
                     }
                 }
             }
             if (x == 0 && y == 0) {
-                System.out.println("x=" + posX + " y=" + posY +" ERREUR");
+                System.out.println("x=" + posX + " y=" + posY + " ERREUR");
             }
             int x2 = posX + x;
             int y2 = posY + y;
@@ -135,7 +134,7 @@ public class Agent {
         }
     }
 
-    public int get_age(){
+    public int get_age() {
         return age;
     }
 
