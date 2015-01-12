@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -9,71 +8,54 @@ import java.util.Random;
 public class SMA extends JFrame {
 
     public static ArrayList<Agent> agents = new ArrayList<Agent>();
-    public final int length_map = 30;
+    public final int length_map = 100;
     public ArrayList<Agent> agents_alea = new ArrayList<Agent>();
     public String fish_shark_pop = "F S\n";
     public String fish_shark_overTime = "T F S \n";
     public int time = 0;
     public int nb_shark = 0;
     public int nb_fish = 0;
-    public Object[][] donnees;
-    public String[] entetes;
-    public JTable tableau;
+    public int slow = 50;
+    public Object[][] data;
+    public Env env;
     //plot "graph_pop_time.log" u 1:2 w l, "graph_pop_time.log" u 1:3 w l
 
     public SMA() {
         super();
+
         setTitle("Fish & Shark");
+
+        //nb_fish,  nb_shark,  f/s_breeding_time,  feeding_time,  length_map
+        env=constructor(length_map*5, length_map*5,3, 8, 2, length_map);
+        data = new Object[length_map][length_map];
+        Rect jc = new Rect();
+        jc.Set_Rect(data);
+        this.getContentPane().add(jc);
+        this.setSize(length_map*8,length_map*8);
+        this.setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
 
     public static void main(String[] args) {
         SMA sm = new SMA();
-        //nb_fish,  nb_shark,  breeding_time,  feeding_time,  length_map
-
-
-        sm.entetes = new String[sm.length_map];
-        for (int i = 0; i < sm.length_map; i++) {
-            sm.entetes[i] = "";
-        }
-
-        Env a = sm.constructor(100, 65, 4, 3, sm.length_map);
-        sm.donnees = new Object[sm.length_map][sm.length_map];
-        sm.render();
-        sm.tableau.setDefaultRenderer(Object.class, new jTableRender());
-        sm.setVisible(true);
         boolean launch = true;
-        //for (int i = 0; i < 20; i++) {
+
         while (launch) {
             //sm.render_console(a);
-            sm.readeable_env(a);
             sm.dIt();
-            sm.repaint();
 
             if (sm.nb_fish == 0 || sm.nb_shark == 0) {
                 launch = false;
             }
-
-            try {
-                Thread.sleep(250);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
         }
         sm.write_file(sm.fish_shark_pop, "graph_pop.log");
         sm.write_file(sm.fish_shark_overTime, "graph_pop_time.log");
         System.out.println("over");
     }
 
-    public void render() {
-        tableau = new JTable(donnees, entetes);
-        getContentPane().add(tableau, BorderLayout.NORTH);
-        tableau.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        pack();
-    }
-
     public void dIt() {
+        readable_env();
         randomize_agents();
         int i = 0;
         while (i < agents_alea.size()) {
@@ -86,18 +68,24 @@ public class SMA extends JFrame {
         fish_shark_pop += nb_fish + " " + nb_shark + "\n";
         fish_shark_overTime += time + " " + nb_fish + " " + nb_shark + "\n";
 
+        try {
+            Thread.sleep(slow);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        repaint();
 
     }
 
-    public void readeable_env(Env env) {
+    public void readable_env() {
         int i2 = 0;
         int j2 = 0;
         for (Agent i[] : env.map) {
             for (Agent j : i) {
                 if (j == null) {
-                    donnees[i2][j2] = " ";
+                    data[i2][j2] = " ";
                 } else {
-                    donnees[i2][j2] = "" + j.toString();
+                    data[i2][j2] = "" + j.toString();
                 }
                 j2++;
             }
@@ -141,7 +129,7 @@ public class SMA extends JFrame {
         }
     }
 
-    public Env constructor(int nb_fish, int nb_shark, int breeding_time, int feeding_time, int lenght_map) {
+    public Env constructor(int nb_fish, int nb_shark, int fish_breeding_time, int shark_breeding_time, int feeding_time, int lenght_map) {
         Env env = new Env(lenght_map, lenght_map);
         for (int i = 0; i < nb_fish; i++) {
             boolean search = true;
@@ -149,7 +137,7 @@ public class SMA extends JFrame {
                 int x = get_alea(0, lenght_map - 1);
                 int y = get_alea(0, lenght_map - 1);
                 if (env.map[x][y] == null) {
-                    Agent f = new Fish(env, x, y, breeding_time);
+                    Agent f = new Fish(env, x, y, fish_breeding_time);
                     agents.add(f);
                     search = false;
                 }
@@ -162,7 +150,7 @@ public class SMA extends JFrame {
                 int x = get_alea(0, lenght_map - 1);
                 int y = get_alea(0, lenght_map - 1);
                 if (env.map[x][y] == null) {
-                    Agent s = new Shark(env, x, y, breeding_time, feeding_time);
+                    Agent s = new Shark(env, x, y, shark_breeding_time, feeding_time);
                     agents.add(s);
                     search = false;
                 }
