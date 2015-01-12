@@ -1,11 +1,14 @@
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class SMA extends JFrame {
+public class SMA extends JFrame implements ActionListener {
 
     public static ArrayList<Agent> agents = new ArrayList<Agent>();
     public final int length_map = 100;
@@ -18,20 +21,30 @@ public class SMA extends JFrame {
     public int slow = 50;
     public Object[][] data;
     public Env env;
+    public boolean play = true;
+    public boolean launch = true;
+    public JButton ss;
+    public JButton arret;
     //plot "graph_pop_time.log" u 1:2 w l, "graph_pop_time.log" u 1:3 w l
 
     public SMA() {
         super();
 
         setTitle("Fish & Shark");
-
+        this.setLayout(new BorderLayout());
+        ss = new JButton("Pause");
+        this.add(ss, BorderLayout.EAST);
+        arret = new JButton("Stop");
+        this.add(arret, BorderLayout.SOUTH);
+        arret.addActionListener(this);
+        ss.addActionListener(this);
         //nb_fish,  nb_shark,  f/s_breeding_time,  feeding_time,  length_map
-        env=constructor(length_map*5, length_map*5,3, 8, 2, length_map);
+        env = constructor(length_map * 5, length_map * 5, 3, 8, 2, length_map);
         data = new Object[length_map][length_map];
         Rect jc = new Rect();
         jc.Set_Rect(data);
         this.getContentPane().add(jc);
-        this.setSize(length_map*8,length_map*8);
+        this.setSize(length_map * 8, length_map * 8);
         this.setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -39,19 +52,26 @@ public class SMA extends JFrame {
 
     public static void main(String[] args) {
         SMA sm = new SMA();
-        boolean launch = true;
-
-        while (launch) {
-            //sm.render_console(a);
-            sm.dIt();
-
-            if (sm.nb_fish == 0 || sm.nb_shark == 0) {
-                launch = false;
-            }
+        while (sm.launch) {
+            sm.play_it();
         }
         sm.write_file(sm.fish_shark_pop, "graph_pop.log");
         sm.write_file(sm.fish_shark_overTime, "graph_pop_time.log");
-        System.out.println("over");
+        sm.dispose();
+        System.out.println("Sortie...");
+    }
+
+    public void play_it() {
+
+        if (play) {
+            //sm.render_console(a);
+            dIt();
+            if (nb_fish == 0 || nb_shark == 0) {
+                launch = false;
+                play = false;
+            }
+        }
+
     }
 
     public void dIt() {
@@ -169,5 +189,19 @@ public class SMA extends JFrame {
         return (rand.nextInt(max - min + 1) + min);
     }
 
+    public void actionPerformed(ActionEvent arg0) {
+        if (arg0.getSource() == ss) {
+            play = !play;
+            if (play) {
+                ss.setText("Start");
+            } else {
+                ss.setText("Pause");
+            }
+        } else if (arg0.getSource() == arret) {
+            launch = false;
+            play = false;
+
+        }
+    }
 
 }

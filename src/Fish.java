@@ -7,10 +7,6 @@ public class Fish extends Agent {
 
     }
 
-    public void doIt() {
-        super.doIt();
-    }
-
     @Override
     public void reproduce(int posX, int posY) {
         Agent f = new Fish(env, posX, posY, breeding_time);
