@@ -11,7 +11,7 @@ import java.util.Random;
 public class SMA extends JFrame implements ActionListener {
 
     public static ArrayList<Agent> agents = new ArrayList<Agent>();
-    public final int length_map = 100;
+    public final int length_map = 150;
     public ArrayList<Agent> agents_alea = new ArrayList<Agent>();
     public String fish_shark_pop = "F S\n";
     public String fish_shark_overTime = "T F S \n";
@@ -19,7 +19,7 @@ public class SMA extends JFrame implements ActionListener {
     public int time = 0;
     public int nb_shark = 0;
     public int nb_fish = 0;
-    public int slow = 50;
+    public int slow = 20;
     public Object[][] data;
     public Env env;
     public boolean play = true;
@@ -39,6 +39,7 @@ public class SMA extends JFrame implements ActionListener {
         arret.addActionListener(this);
         ss.addActionListener(this);
         //nb_fish,  nb_shark,  f/s_breeding_time,  feeding_time,  length_map
+        //(length_map * 5, length_map * 5, 3, 8, 2, length_map);
         env = constructor(length_map * 5, length_map * 5, 3, 8, 2, length_map);
         data = new Object[length_map][length_map];
         Rect jc = new Rect();
@@ -70,12 +71,11 @@ public class SMA extends JFrame implements ActionListener {
             }
 
             dIt();
-            if (nb_fish == 0 || nb_shark == 0) {
+            /*if (nb_fish == 0 || nb_shark == 0) {
                 launch = false;
                 play = false;
-            }
+            }*/
         }
-
     }
 
     public void dIt() {
