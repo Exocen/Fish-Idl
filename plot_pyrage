@@ -1,6 +1,6 @@
-set title "Pyramide des ages"
-set xlabel "Age_Population"
-set ylabel "Nb_Population"
+set title "Population pyramid"
+set xlabel "Nb_Population"
+set ylabel "Age_Population"
 set term png
 set out "pyramyde_age.png"
-plot "graph_pop_age.log" u 2:1 w l, "graph_pop_age.log" u 3:1 w l
+plot  "graph_pop_age.log" u 3:1 w l title "Shark", "graph_pop_age.log" u 2:1 w l title "Fish"

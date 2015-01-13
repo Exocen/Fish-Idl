@@ -3,4 +3,4 @@ set xlabel "Shark"
 set ylabel "Fish"
 set term png
 set out "pop_shark_fish.png"
-plot "graph_pop.log" u 1:2 w l
+plot "graph_pop.log" u 1:2 w l title "Sharks/Fish"
