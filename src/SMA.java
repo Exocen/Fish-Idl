@@ -15,6 +15,7 @@ public class SMA extends JFrame implements ActionListener {
     public ArrayList<Agent> agents_alea = new ArrayList<Agent>();
     public String fish_shark_pop = "F S\n";
     public String fish_shark_overTime = "T F S \n";
+    public String fish_shark_age= "A F S\n";
     public int time = 0;
     public int nb_shark = 0;
     public int nb_fish = 0;
@@ -29,7 +30,6 @@ public class SMA extends JFrame implements ActionListener {
 
     public SMA() {
         super();
-
         setTitle("Fish & Shark");
         this.setLayout(new BorderLayout());
         ss = new JButton("Pause");
@@ -47,7 +47,6 @@ public class SMA extends JFrame implements ActionListener {
         this.setSize(length_map * 8, length_map * 8);
         this.setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
     }
 
     public static void main(String[] args) {
@@ -57,6 +56,8 @@ public class SMA extends JFrame implements ActionListener {
         }
         sm.write_file(sm.fish_shark_pop, "graph_pop.log");
         sm.write_file(sm.fish_shark_overTime, "graph_pop_time.log");
+        sm.make_age();
+        sm.write_file(sm.fish_shark_age,"graph_pop_age.log");
         sm.dispose();
         System.out.println("Sortie...");
     }
@@ -64,7 +65,10 @@ public class SMA extends JFrame implements ActionListener {
     public void play_it() {
 
         if (play) {
-            //sm.render_console(a);
+            if (!this.getFocusableWindowState()){
+                render_console(env);
+            }
+
             dIt();
             if (nb_fish == 0 || nb_shark == 0) {
                 launch = false;
@@ -94,6 +98,32 @@ public class SMA extends JFrame implements ActionListener {
             e.printStackTrace();
         }
         repaint();
+
+    }
+
+    public void make_age(){
+        int l = 101;
+        int fa[]=new int[l];
+        int sa[]=new int[l];
+
+        for (Agent a: agents){
+            if (a.toString().equals("F")){
+                if (a.get_age()<l){
+                    fa[a.get_age()]++;
+                }
+            }
+            if (a.toString().equals("S")){
+                if (a.get_age()<l){
+                    sa[a.get_age()]++;
+                }
+            }
+        }
+
+        for (int i=0; i<l;i++){
+            fish_shark_age+=i+" "+fa[i]+" "+sa[i]+"\n";
+        }
+        //System.out.println(fish_shark_age);
+
 
     }
 
