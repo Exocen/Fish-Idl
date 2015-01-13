@@ -19,6 +19,9 @@ public class SMA extends JFrame implements ActionListener {
     public int time = 0;
     public int nb_shark = 0;
     public int nb_fish = 0;
+    /**
+     * The value of the thread.sleep
+     */
     public int slow = 20;
     public Object[][] data;
     public Env env;
@@ -26,7 +29,6 @@ public class SMA extends JFrame implements ActionListener {
     public boolean launch = true;
     public JButton ss;
     public JButton arret;
-    //plot "graph_pop_time.log" u 1:2 w l, "graph_pop_time.log" u 1:3 w l
 
     public SMA() {
         super();
@@ -38,8 +40,6 @@ public class SMA extends JFrame implements ActionListener {
         this.add(arret, BorderLayout.SOUTH);
         arret.addActionListener(this);
         ss.addActionListener(this);
-        //nb_fish,  nb_shark,  f/s_breeding_time,  feeding_time,  length_map
-        //(length_map * 5, length_map * 5, 3, 8, 2, length_map);
         env = constructor(length_map * 5, length_map * 5, 3, 8, 2, length_map);
         data = new Object[length_map][length_map];
         Rect jc = new Rect();
@@ -71,13 +71,16 @@ public class SMA extends JFrame implements ActionListener {
             }
 
             dIt();
-            /*if (nb_fish == 0 || nb_shark == 0) {
+            if (nb_fish == 0 || nb_shark == 0) {
                 launch = false;
                 play = false;
-            }*/
+            }
         }
     }
 
+    /**
+     * Do the stuff ^^
+     */
     public void dIt() {
         readable_env();
         randomize_agents();
@@ -101,6 +104,9 @@ public class SMA extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * Refresh fish_shark_age variable
+     */
     public void make_age(){
         int l = 101;
         int fa[]=new int[l];
@@ -122,11 +128,11 @@ public class SMA extends JFrame implements ActionListener {
         for (int i=0; i<l;i++){
             fish_shark_age+=i+" "+fa[i]+" "+sa[i]+"\n";
         }
-        //System.out.println(fish_shark_age);
-
-
     }
 
+    /**
+     * Refresh the env
+     */
     public void readable_env() {
         int i2 = 0;
         int j2 = 0;

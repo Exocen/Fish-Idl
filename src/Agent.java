@@ -24,6 +24,13 @@ public class Agent {
     }
 
 
+    /**
+     * Le requin mange un poisson proche aléatoiresi possible
+     * puis se deplace a son emplacement s'il n'y a pas de poisson
+     * il cherche une case vide aléatoire proche et s'y déplace
+     * s'il doit se reproduire il laisse un nouveau requin a son ancien emplacement
+     * c-a-d que si aucune case proche n'est libre ou ne contient un poisson il ne peut se reproduire
+     */
     protected void doIt() {
         age++;
         zone_build();
