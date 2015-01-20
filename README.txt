@@ -1,4 +1,4 @@
-Fish&Shark IDL
+Tuna&Shark IDL
 
 Pour lancer l'application il suffit de lancer le fichier
 "make_stuff.sh" avec :

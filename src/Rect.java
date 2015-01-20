@@ -22,7 +22,7 @@ public class Rect extends JComponent {
                     g.setColor(blue);
                 } else if (j.toString().equals("S")) {
                     g.setColor(red);
-                } else if (j.toString().equals("F")) {
+                } else if (j.toString().equals("T")) {
                     g.setColor(green);
                 }
 

@@ -13,12 +13,12 @@ public class SMA extends JFrame implements ActionListener {
     public static ArrayList<Agent> agents = new ArrayList<Agent>();
     public final int length_map = 150;
     public ArrayList<Agent> agents_alea = new ArrayList<Agent>();
-    public String fish_shark_pop = "F S\n";
-    public String fish_shark_overTime = "T F S \n";
-    public String fish_shark_age= "A F S\n";
+    public String tuna_shark_pop = "F S\n";
+    public String tuna_shark_overTime = "T F S \n";
+    public String tuna_shark_age= "A F S\n";
     public int time = 0;
     public int nb_shark = 0;
-    public int nb_fish = 0;
+    public int nb_tuna = 0;
     /**
      * The value of the thread.sleep
      */
@@ -32,7 +32,7 @@ public class SMA extends JFrame implements ActionListener {
 
     public SMA() {
         super();
-        setTitle("Fish & Shark");
+        setTitle("Tuna & Shark");
         this.setLayout(new BorderLayout());
         ss = new JButton("Pause");
         this.add(ss, BorderLayout.EAST);
@@ -55,10 +55,10 @@ public class SMA extends JFrame implements ActionListener {
         while (sm.launch) {
             sm.play_it();
         }
-        sm.write_file(sm.fish_shark_pop, "graph_pop.log");
-        sm.write_file(sm.fish_shark_overTime, "graph_pop_time.log");
+        sm.write_file(sm.tuna_shark_pop, "graph_pop.log");
+        sm.write_file(sm.tuna_shark_overTime, "graph_pop_time.log");
         sm.make_age();
-        sm.write_file(sm.fish_shark_age,"graph_pop_age.log");
+        sm.write_file(sm.tuna_shark_age,"graph_pop_age.log");
         sm.dispose();
         System.out.println("Sortie...");
     }
@@ -66,12 +66,9 @@ public class SMA extends JFrame implements ActionListener {
     public void play_it() {
 
         if (play) {
-            if (!this.getFocusableWindowState()){
-                render_console(env);
-            }
 
             dIt();
-            if (nb_fish == 0 || nb_shark == 0) {
+            if (nb_tuna == 0 || nb_shark == 0) {
                 launch = false;
                 play = false;
             }
@@ -92,8 +89,8 @@ public class SMA extends JFrame implements ActionListener {
         }
         time++;
         get_pop();
-        fish_shark_pop += nb_fish + " " + nb_shark + "\n";
-        fish_shark_overTime += time + " " + nb_fish + " " + nb_shark + "\n";
+        tuna_shark_pop += nb_tuna + " " + nb_shark + "\n";
+        tuna_shark_overTime += time + " " + nb_tuna + " " + nb_shark + "\n";
 
         try {
             Thread.sleep(slow);
@@ -105,7 +102,7 @@ public class SMA extends JFrame implements ActionListener {
     }
 
     /**
-     * Refresh fish_shark_age variable
+     * Refresh tuna_shark_age variable
      */
     public void make_age(){
         int l = 101;
@@ -118,7 +115,7 @@ public class SMA extends JFrame implements ActionListener {
                     fa[a.get_age()]++;
                 }
             }
-            if (a.toString().equals("S")){
+            if (a.toString().equals("T")){
                 if (a.get_age()<l){
                     sa[a.get_age()]++;
                 }
@@ -126,7 +123,7 @@ public class SMA extends JFrame implements ActionListener {
         }
 
         for (int i=0; i<l;i++){
-            fish_shark_age+=i+" "+fa[i]+" "+sa[i]+"\n";
+            tuna_shark_age+=i+" "+fa[i]+" "+sa[i]+"\n";
         }
     }
 
@@ -150,28 +147,14 @@ public class SMA extends JFrame implements ActionListener {
         }
     }
 
-    public void render_console(Env e) {
-        for (Agent i[] : e.map) {
-            for (Agent j : i) {
-                if (j == null) {
-                    System.out.print(" |");
-                } else {
-                    System.out.print(j + "|");
-                }
-            }
-            System.out.println();
-        }
-        System.out.println("------------------------------------------------------------");
-    }
-
     public void get_pop() {
-        nb_fish = 0;
+        nb_tuna = 0;
         nb_shark = 0;
         for (int i = 0; i < agents_alea.size(); i++) {
             if (agents.get(i).toString().equals("S")) {
                 nb_shark++;
-            } else if (agents.get(i).toString().equals("F")) {
-                nb_fish++;
+            } else if (agents.get(i).toString().equals("T")) {
+                nb_tuna++;
             }
         }
     }
@@ -185,16 +168,16 @@ public class SMA extends JFrame implements ActionListener {
         }
     }
 
-    public Env constructor(int nb_fish, int nb_shark, int fish_breeding_time, int shark_breeding_time, int feeding_time, int lenght_map) {
+    public Env constructor(int nb_tuna, int nb_shark, int tuna_breeding_time, int shark_breeding_time, int feeding_time, int lenght_map) {
         Env env = new Env(lenght_map, lenght_map);
-        for (int i = 0; i < nb_fish; i++) {
+        for (int i = 0; i < nb_tuna; i++) {
             boolean search = true;
             while (search) {
                 int x = get_alea(0, lenght_map - 1);
                 int y = get_alea(0, lenght_map - 1);
                 if (env.map[x][y] == null) {
-                    Agent f = new Fish(env, x, y, fish_breeding_time);
-                    agents.add(f);
+                    Tuna t = new Tuna(env, x, y, tuna_breeding_time);
+                    agents.add(t);
                     search = false;
                 }
             }
@@ -206,7 +189,7 @@ public class SMA extends JFrame implements ActionListener {
                 int x = get_alea(0, lenght_map - 1);
                 int y = get_alea(0, lenght_map - 1);
                 if (env.map[x][y] == null) {
-                    Agent s = new Shark(env, x, y, shark_breeding_time, feeding_time);
+                    Shark s = new Shark(env, x, y, shark_breeding_time, feeding_time);
                     agents.add(s);
                     search = false;
                 }

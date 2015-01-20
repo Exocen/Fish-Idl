@@ -1,4 +1,4 @@
-public class Shark extends Agent {
+public class Shark extends Fish {
 
     private final int feeding_time;
     private int feeding_state = 0;
@@ -9,18 +9,24 @@ public class Shark extends Agent {
 
     }
 
+    /**
+     * Le requin mange un poisson proche aléatoiresi possible
+     * puis se deplace a son emplacement s'il n'y a pas de poisson
+     * il cherche une case vide aléatoire proche et s'y déplace
+     * s'il doit se reproduire il laisse un nouveau requin a son ancien emplacement
+     * c-a-d que si aucune case proche n'est libre ou ne contient un poisson il ne peut se reproduire
+     */
     public void doIt() {
         zone_build();
-        if (nb_fish != 0) {
+        if (nb_tuna != 0) {
 
-            int random_fish = get_alea(1, nb_fish);
+            int random_fish = get_alea(1, nb_tuna);
             int ite = 1;
             int x2 = 0;
             int y2 = 0;
             for (int i = 0; i < zone.length; i++) {
-                if (zone[i] != null && zone[i].equals("F")) {
+                if (zone[i] != null && zone[i].equals("T")) {
                     if (ite == random_fish) {
-                        //System.out.println("x=" + posX + " y=" + posY + " zone=" + zone[i] + " random=" + random_fish + " nbfi=" + nb_fish);
                         int[] coord = coordinate(i);
                         x2 = coord[0];
                         y2 = coord[1];
